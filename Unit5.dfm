@@ -1,0 +1,28 @@
+object Form5: TForm5
+  Left = 0
+  Top = 0
+  Caption = 'App'
+  ClientHeight = 282
+  ClientWidth = 560
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  TextHeight = 15
+  object StaticText1: TStaticText
+    Left = 144
+    Top = 32
+    Width = 264
+    Height = 41
+    Caption = 'Welcome to the app'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+  end
+end

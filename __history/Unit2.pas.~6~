@@ -1,0 +1,158 @@
+unit Unit2;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,DelphiZXingQRCode,
+  Vcl.ComCtrls,Math, REST.Types, Data.Bind.Components, Data.Bind.ObjectScope,
+  REST.Client, System.JSON, Vcl.WinXCtrls,  ShellAPI;
+
+type
+  TSessionVForm = class(TForm)
+    ProgressBar1: TProgressBar;
+    Label1: TLabel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  SessionVForm: TSessionVForm;
+  AuthUrl:String
+
+implementation
+
+{$R *.dfm}
+
+
+
+
+
+
+
+
+procedure GetAuthenticationDetails();
+var
+
+  RESTClient: TRESTClient;
+  RESTRequest: TRESTRequest;
+  RESTResponse: TRESTResponse;
+  Response: TJSONObject;
+
+  DeviceIdentifier: string;
+begin
+  RESTClient := TRESTClient.Create('https://newsoft-board.vercel.app/api/STOCK');
+  RESTRequest := TRESTRequest.Create(nil);
+  RESTResponse := TRESTResponse.Create(nil);
+  Response := nil;
+  DeviceIdentifier := '123456789';    // Replace '' with a real device ID
+
+  try
+    try
+      // Set up REST components
+      RESTRequest.Client := RESTClient;
+      RESTRequest.Response := RESTResponse;
+      RESTRequest.Resource := Format('generate-session-id?deviceId=%s', [DeviceIdentifier]);
+      RESTRequest.Method := rmPOST;
+
+      // Execute the request
+      RESTRequest.Execute;
+
+      // Parse the response JSON
+      Response := TJSONObject.ParseJSONValue(RESTResponse.Content) as TJSONObject;
+      if Assigned(Response) and Assigned(Response.Values['data']) and
+         (Response.Values['code'].Value = 'SUCCESS') then
+      begin
+        AuthUrl := Format('https://newsoft-board.vercel.app/app-link?deviceId=%s&sessionId=%s', [DeviceIdentifier,Response.Values['data'].Value]);
+      end
+      else
+      begin
+        ShowMessage('Invalid response: "data" not found in JSON');
+      end;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('An error occurred during REST request: ' + E.Message);
+        Exit; // Exit if REST request fails
+      end;
+    end;
+  finally
+    RESTRequest.Free;
+    RESTResponse.Free;
+    RESTClient.Free;
+    Response.Free;
+  end;
+
+  // QR Code generation logic
+  try
+    QRCode.Data := AuthUrl;
+    QRCode.Encoding := TQRCodeEncoding.qrAuto;
+
+    // Get the size of the TImage component
+    ImageWidth := Image.Width;
+    ImageHeight := Image.Height;
+
+    // Calculate the scale factor to fit the QR code inside the image
+    ScaleFactor := Min(ImageWidth, ImageHeight) / Max(QRCode.Rows, QRCode.Columns);
+
+    // Calculate the cell size based on the scale factor
+    CellSize := Round(ScaleFactor);
+
+    // Resize the bitmap to fit the QR code
+    Image.Picture.Bitmap.SetSize(ImageWidth, ImageHeight);
+    Image.Picture.Bitmap.Canvas.Brush.Color := clWhite;
+    Image.Picture.Bitmap.Canvas.FillRect(Rect(0, 0, ImageWidth, ImageHeight));
+
+    // Set the brush color to black for QR code cells
+    Image.Picture.Bitmap.Canvas.Brush.Color := clBlack;
+
+    // Draw the QR code on the image
+    for Row := 0 to QRCode.Rows - 1 do
+      for Col := 0 to QRCode.Columns - 1 do
+        if QRCode.IsBlack[Row, Col] then
+          Image.Picture.Bitmap.Canvas.FillRect(
+            Rect(Col * CellSize, Row * CellSize, (Col + 1) * CellSize, (Row + 1) * CellSize)
+          );
+
+
+  finally
+  begin
+    ContinueButton.Enabled := True;
+    VisitAuthButton.Enabled := True;
+    QRCode.Free;
+  end;
+  end;
+end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end.

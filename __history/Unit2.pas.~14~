@@ -1,0 +1,91 @@
+unit Unit2;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,DelphiZXingQRCode,
+  Vcl.ComCtrls,Math, REST.Types, Data.Bind.Components, Data.Bind.ObjectScope,
+  REST.Client, System.JSON, Vcl.WinXCtrls,  ShellAPI,System.Threading,Unit3;
+
+type
+  TSessionVForm = class(TForm)
+    ProgressBar1: TProgressBar;
+  Label1: TLabel;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+
+    { Public declarations }
+  end;
+
+var
+  SessionVForm: TSessionVForm;
+  AuthToken:String;
+
+implementation
+
+{$R *.dfm}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+procedure TSessionVForm.FormCreate(Sender: TObject);
+begin
+
+ try
+
+
+    TTask.Run(procedure
+    begin
+      // Call the API in a background thread
+      TMaster.ValidateUserSession(TMaster.SessionId);
+      // Update UI in the main thread after the API call
+      TThread.Synchronize(nil, procedure
+      begin
+        // Perform UI updates here if needed
+        SessionVForm.Close;
+      end);
+    end);
+  except
+    on E: Exception do
+    begin
+      // Handle exceptions
+      ShowMessage('An error occurred: ' + E.Message);
+    end;
+  end;
+
+end;
+
+end.
