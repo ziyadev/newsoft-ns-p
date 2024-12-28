@@ -1,0 +1,145 @@
+object Authenticate: TAuthenticate
+  Left = 0
+  Top = 0
+  Caption = 'Activation'
+  ClientHeight = 396
+  ClientWidth = 571
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  OldCreateOrder = True
+  Position = poDesktopCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 15
+  object Panel1: TPanel
+    Left = 24
+    Top = 8
+    Width = 521
+    Height = 329
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 25
+      Top = 47
+      Width = 471
+      Height = 21
+      Caption = 
+        'Avant de commencer, vous devez terminer le processus d'#39'activatio' +
+        'n.'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+    end
+    object StaticText1: TStaticText
+      Left = 192
+      Top = 8
+      Width = 137
+      Height = 41
+      Caption = 'Activation'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -27
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+    end
+    object StaticText2: TStaticText
+      Left = 16
+      Top = 88
+      Width = 198
+      Height = 19
+      Caption = '* Scan the QR code with your phone.'
+      TabOrder = 2
+    end
+    object StaticText3: TStaticText
+      Left = 16
+      Top = 113
+      Width = 112
+      Height = 19
+      Caption = '* Verify your identity'
+      TabOrder = 3
+    end
+    object StaticText4: TStaticText
+      Left = 16
+      Top = 138
+      Width = 197
+      Height = 19
+      Caption = '* Give the app permission to activate'
+      TabOrder = 4
+    end
+    object StaticText5: TStaticText
+      Left = 16
+      Top = 163
+      Width = 266
+      Height = 19
+      Caption = '* After your confirm press on verify button bellow'
+      TabOrder = 5
+    end
+    object Panel2: TPanel
+      Left = 297
+      Top = 74
+      Width = 217
+      Height = 245
+      TabOrder = 1
+      object TQrCodeImage: TImage
+        Left = 9
+        Top = 8
+        Width = 200
+        Height = 200
+        AutoSize = True
+        Center = True
+        Visible = False
+      end
+      object ProgressBar1: TProgressBar
+        Left = 24
+        Top = 89
+        Width = 169
+        Height = 17
+        Style = pbstMarquee
+        TabOrder = 0
+      end
+      object VisitAuthButton: TButton
+        Left = 25
+        Top = 214
+        Width = 168
+        Height = 25
+        Caption = 'Ou visitez ce lien'
+        Enabled = False
+        TabOrder = 1
+        OnClick = VisitAuthButtonClick
+      end
+    end
+  end
+  object ValidateSessionButton: TButton
+    Left = 378
+    Top = 355
+    Width = 167
+    Height = 33
+    Caption = 'Continuer'
+    Enabled = False
+    TabOrder = 2
+    OnClick = ValidateSessionButtonClick
+  end
+  object Button2: TButton
+    Left = 24
+    Top = 355
+    Width = 153
+    Height = 33
+    Caption = 'Quitter'
+    TabOrder = 1
+    OnClick = Button2Click
+  end
+  object RESTClient1: TRESTClient
+    Params = <>
+    SynchronizedEvents = False
+    Left = 80
+    Top = 248
+  end
+end
